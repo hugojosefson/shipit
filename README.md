@@ -15,9 +15,8 @@ tweaks have been made to optimize for Deno:
   syncs your code when you publish a Github release, publishing is all you need.
 
 - Documentation changes cause a minor version bump. Documentation is a feature,
-  especially since [deno doc](https://deno.land/manual/tools/documentation) will
-  scrape your code. This decision is less of a Deno convention, and mostly my
-  opinion.
+  especially since [deno doc](https://doc.deno.land) will scrape your code. This
+  decision is less of a Deno convention, and mostly my opinion.
 
 - The release workflow is opinionated, and as such runs _fast_ and has _zero
   configuration_. `feat!:` will cause a major version bump, `feat:` or `docs:`
