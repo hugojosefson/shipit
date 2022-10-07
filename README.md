@@ -11,7 +11,7 @@ Install `shipit` locally:
 deno install --allow-env --allow-run --allow-net https://deno.land/x/shipit/shipit.ts
 ```
 
-And run it!
+And ship it!
 
 ```sh
 shipit
