@@ -61,6 +61,7 @@ on:
         with:
           deno-version: vx.x.x
 
+      # Use latest version of shipit.  You may prefer to pin a specific version.
       - run: deno run --allow-net --allow-env --allow-run https://deno.land/x/shipit/shipit.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
