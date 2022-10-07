@@ -1,5 +1,4 @@
-import { Octokit } from "https://esm.sh/@octokit/core@4.0.5";
-import { restEndpointMethods } from "https://esm.sh/@octokit/plugin-rest-endpoint-methods@6.6.2";
+import { Octokit, restEndpointMethods } from "./deps.ts";
 
 export interface Commits {
   major: string[];
