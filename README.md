@@ -8,7 +8,7 @@ but opinionated, fast, and built with Deno in mind.
 Install `shipit` locally:
 
 ```sh
-deno install --allow-env --allow-run https://deno.land/x/shipit/shipit.ts
+deno install --allow-env --allow-run --allow-net https://deno.land/x/shipit/shipit.ts
 ```
 
 And run it!
