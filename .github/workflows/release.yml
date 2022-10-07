@@ -4,18 +4,34 @@ on:
       - main
 
 jobs:
-  release:
+  lint:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
+      - uses: actions/checkout@v3
       - uses: denoland/setup-deno@v1
         with:
           deno-version: vx.x.x
+      - run: deno lint
 
-      - run: deno run --allow-net --allow-env --allow-run https://deno.land/x/shipit/shipit.ts
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: vx.x.x
+      - run: deno fmt --check
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [lint, format]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: vx.x.x
+      - run: deno run --allow-net --allow-env --allow-run shipit.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
