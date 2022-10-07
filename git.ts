@@ -1,4 +1,4 @@
-import { colors } from "./deps.ts";
+import { colors, parseRepo } from "./deps.ts";
 
 export const ROOT = Symbol();
 
@@ -64,5 +64,16 @@ export default {
 
   pushTag(tag: string): Promise<string> {
     return bash(`git push origin ${tag}`);
+  },
+
+  async repoInfo(): Promise<{ repo: string; owner: string }> {
+    const { project: repo, owner } = parseRepo(
+      await bash("git remote get-url origin | tr -d '\n'"),
+    );
+
+    return {
+      repo,
+      owner: owner ?? "",
+    };
   },
 };

@@ -1,4 +1,5 @@
 import { Octokit, restEndpointMethods } from "./deps.ts";
+import git from "./git.ts";
 
 export interface Commits {
   major: string[];
@@ -41,8 +42,7 @@ function generateNotes(
 
 export default {
   async release(nextVer: string, commits: Commits): Promise<string> {
-    const owner = "justinawrey";
-    const repo = "shipit";
+    const { owner, repo } = await git.repoInfo();
 
     const restOctokit = Octokit.plugin(restEndpointMethods);
     const octokit = new restOctokit({
