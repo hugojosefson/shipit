@@ -3,6 +3,27 @@
 Like [semantic-release](https://github.com/semantic-release/semantic-release),
 but opinionated, fast, and built with Deno in mind.
 
+## How is this different?
+
+Its not, really. It's a different implementation of the same idea. However, some
+tweaks have been made to optimize for Deno:
+
+- Releases start at `0.1.0`. This is a common convention for Node projects, but
+  seems to be even more common for Deno projects.
+
+- No support for publishing to npm. Since [deno.land/x](https://deno.land/x)
+  syncs your code when you publish a Github release, publishing is all you need.
+
+- Documentation changes cause a minor version bump. Documentation is a feature,
+  especially since [deno doc](https://deno.land/manual/tools/documentation) will
+  scrape your code. This decision is less of a Deno convention, and mostly my
+  opinion.
+
+- The release workflow is opinionated, and as such runs _fast_ and has _zero
+  configuration_. `feat!:` will cause a major version bump, `feat:` or `docs:`
+  will cause a minor version bump, and `fix:` will cause a patch version bump.
+  Thats it!
+
 ## Usage
 
 Install `shipit` locally:
@@ -60,3 +81,8 @@ script, as well as set `fetch-depth: 0` in the checkout step.
 
 - `--allow-net`: `shipit` needs to make outbound networks requests to Github in
   order to create Github releases
+
+## Examples
+
+`shipit` uses itself for releases. You can see the shape of the generated
+releases [here](https://github.com/justinawrey/shipit/releases).
