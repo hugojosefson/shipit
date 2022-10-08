@@ -1,5 +1,8 @@
 # shipit :canoe:
 
+[![deno module](https://shield.deno.dev/x/shipit)](https://deno.land/x/shipit)
+[![release](https://github.com/justinawrey/shipit/actions/workflows/release.yml/badge.svg)](https://github.com/justinawrey/shipit/actions/workflows/release.yml)
+
 Like [semantic-release](https://github.com/semantic-release/semantic-release),
 but opinionated, fast, and built with Deno in mind.
 
