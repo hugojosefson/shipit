@@ -69,6 +69,17 @@ console.log("New remote tag created:", `${nextVer}\n`);
 
 // Create Github release.
 logHeader("Creating new Github release...");
-const url = await github.release(nextVer, { major, minor, patch, docs });
+
+let url: string;
+try {
+  url = await github.release(nextVer, { major, minor, patch, docs });
+} catch (error) {
+  // Something went wrong, so delete the local and remote tag and bail.
+  console.error(error);
+  await git.deleteLocalTag(nextVer);
+  await git.deleteRemoteTag(nextVer);
+  Deno.exit(0);
+}
+
 console.log("Successfully created new Github release! 🎉");
 console.log("View it here:", url);
