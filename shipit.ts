@@ -16,7 +16,7 @@ if (!ver) {
   console.log("No previous version found: defaulting to 0.1.0\n");
   ver = ROOT;
 } else {
-  if (!semver.valid(ver)) {
+  if (!semver.tryParse(ver)) {
     throw new Error(`latest version is invalid: ${colors.bold(ver)}`);
   }
   console.log("Found latest version:", `${ver}\n`);
@@ -50,14 +50,13 @@ let nextVer = "0.1.0";
 if (ver !== ROOT) {
   logHeader("Determining next version...");
   if (major.length) {
-    nextVer = semver.inc(ver, "major") as string;
+    nextVer = semver.format(semver.increment(semver.parse(ver), "major"));
   } else if (minor.length || docs.length) {
-    nextVer = semver.inc(ver, "minor") as string;
+    nextVer = semver.format(semver.increment(semver.parse(ver), "minor"));
   } else if (patch.length) {
-    nextVer = semver.inc(ver, "patch") as string;
+    nextVer = semver.format(semver.increment(semver.parse(ver), "patch"));
   }
 
-  // @ts-ignore - we know nextVer is a string.
   console.log("Next version:", `${nextVer}\n`);
 }
 
