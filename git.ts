@@ -1,4 +1,4 @@
-import { bash, parseRepo } from "./deps.ts";
+import { parseRepo, run } from "./deps.ts";
 
 export const ROOT = Symbol();
 
@@ -9,17 +9,22 @@ interface LogOptions {
 
 export default {
   latestRemoteTag(): Promise<string> {
-    return bash(
+    return run(
       "git ls-remote --tags --sort=-v:refname origin | head -n 1 | cut -d/ -f3",
     );
   },
 
   log({ grep, since }: LogOptions): Promise<string[]> {
-    return bash(
-      `git log ${
-        since === ROOT ? "" : `${since}..HEAD`
-      } --pretty=format:'%s %h' --abbrev-commit --grep=${grep}`,
-    ).then((commit) => {
+    return run([
+      "git",
+      "log",
+      since === ROOT ? "" : `${since}..HEAD`,
+      "--pretty=format:'%s %h'",
+      "--abbrev-commit",
+      "--extended-regexp",
+      "--grep",
+      grep,
+    ]).then((commit) => {
       if (!commit) {
         return [];
       }
@@ -36,24 +41,24 @@ export default {
   },
 
   tag(tag: string): Promise<string> {
-    return bash(`git tag ${tag}`);
+    return run(`git tag ${tag}`);
   },
 
   pushTag(tag: string): Promise<string> {
-    return bash(`git push origin ${tag}`);
+    return run(`git push origin ${tag}`);
   },
 
   deleteLocalTag(tag: string): Promise<string> {
-    return bash(`git tag -d ${tag}`);
+    return run(`git tag -d ${tag}`);
   },
 
   deleteRemoteTag(tag: string): Promise<string> {
-    return bash(`git push --delete origin ${tag}`);
+    return run(`git push --delete origin ${tag}`);
   },
 
   async repoInfo(): Promise<{ repo: string; owner: string }> {
     const { project: repo, owner } = parseRepo(
-      await bash("git remote get-url origin"),
+      await run("git remote get-url origin"),
     );
 
     return {

@@ -1,7 +1,14 @@
+import {
+  DOCS_COMMIT_REGEX,
+  MAJOR_COMMIT_REGEX,
+  MINOR_COMMIT_REGEX,
+  OTHER_COMMIT_REGEX,
+  PATCH_COMMIT_REGEX,
+} from "./commit-regex.ts";
 import { colors, semver } from "./deps.ts";
-import { logHeader } from "./log.ts";
 import git, { ROOT } from "./git.ts";
 import github from "./github.ts";
+import { logHeader } from "./log.ts";
 
 if (!import.meta.main) {
   Deno.exit(0);
@@ -24,19 +31,24 @@ if (!ver) {
 
 // Get commit history since latest version.
 logHeader("Getting commit history since latest version...");
-const [major, minor, patch, docs] = await Promise.all([
-  git.log({ grep: "feat!:", since: ver }),
-  git.log({ grep: "feat:", since: ver }),
-  git.log({ grep: "fix:", since: ver }),
-  git.log({ grep: "docs:", since: ver }),
+const [major, minor, patch, docs, other] = await Promise.all([
+  git.log({ grep: MAJOR_COMMIT_REGEX.source, since: ver }),
+  git.log({ grep: MINOR_COMMIT_REGEX.source, since: ver }),
+  git.log({ grep: PATCH_COMMIT_REGEX.source, since: ver }),
+  git.log({ grep: DOCS_COMMIT_REGEX.source, since: ver }),
+  git.log({ grep: OTHER_COMMIT_REGEX.source, since: ver }),
 ]);
 
 if (major.length) console.log('Found "major" commits');
 if (minor.length) console.log('Found "minor" commits');
 if (patch.length) console.log('Found "patch" commits');
 if (docs.length) console.log('Found "docs" commits');
-if (!major.length && !minor.length && !patch.length && !docs.length) {
-  console.log("No changes since last release!");
+if (other.length) console.log('Found "other" commits');
+if (
+  !major.length && !minor.length && !patch.length && !docs.length &&
+  !other.length
+) {
+  console.log("No identified changes since last release!");
   Deno.exit(0);
 } else {
   // Log a newline.
@@ -53,7 +65,7 @@ if (ver !== ROOT) {
     nextVer = semver.format(semver.increment(semver.parse(ver), "major"));
   } else if (minor.length || docs.length) {
     nextVer = semver.format(semver.increment(semver.parse(ver), "minor"));
-  } else if (patch.length) {
+  } else if (patch.length || other.length) {
     nextVer = semver.format(semver.increment(semver.parse(ver), "patch"));
   }
 
@@ -71,7 +83,7 @@ logHeader("Creating new GitHub release...");
 
 let url: string;
 try {
-  url = await github.release(nextVer, { major, minor, patch, docs });
+  url = await github.release(nextVer, { major, minor, patch, docs, other });
 } catch (error) {
   // Something went wrong, so delete the local and remote tag and bail.
   console.error(error);

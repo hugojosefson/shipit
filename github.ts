@@ -6,11 +6,12 @@ export interface Commits {
   minor: string[];
   patch: string[];
   docs: string[];
+  other: string[];
 }
 
 function generateNotes(
   version: string,
-  { major, minor, patch, docs }: Commits,
+  { major, minor, patch, docs, other }: Commits,
 ): string {
   function listNotes(notes: string[]): string {
     return notes.map((note) => `- ${note}`).join("\n");
@@ -35,6 +36,11 @@ function generateNotes(
   if (docs.length) {
     notes += `## Documentation\n\n`;
     notes += `${listNotes(docs)}\n`;
+  }
+
+  if (other.length) {
+    notes += `## Other\n\n`;
+    notes += `${listNotes(other)}\n`;
   }
 
   return notes;
