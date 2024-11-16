@@ -9,9 +9,11 @@ interface LogOptions {
 
 export default {
   latestRemoteTag(): Promise<string> {
-    return run(
+    return run([
+      "bash",
+      "-c",
       "git ls-remote --tags --sort=-v:refname origin | head -n 1 | cut -d/ -f3",
-    );
+    ]);
   },
 
   log({ grep, since }: LogOptions): Promise<string[]> {
