@@ -8,7 +8,7 @@ import {
 import * as colors from "@std/fmt/colors";
 import * as semver from "@std/semver";
 import git, { ROOT } from "./git.ts";
-import github from "./github.ts";
+import github, { type Commits, generateReleaseNotes } from "./github.ts";
 import { logHeader } from "./log.ts";
 
 if (!import.meta.main) {
@@ -79,6 +79,23 @@ if (ver !== ROOT) {
   console.log("Next version:", `${nextVer}\n`);
 }
 
+// Generate release notes.
+const commits: Commits = { major, minor, patch, docs, other };
+const releaseNotes = generateReleaseNotes(nextVer, commits);
+
+// If we're in dry run mode, just print the release notes and exit.
+if (
+  Deno.env.get("DRY_RUN") || Deno.args.includes("--dry-run") ||
+  Deno.args.includes("-n")
+) {
+  logHeader(
+    "DRY_RUN or --dry-run is set, so not pushing any tags, nor creating a release.",
+  );
+  console.log(`Release notes for ${nextVer} would be:`);
+  console.log(releaseNotes);
+  Deno.exit(0);
+}
+
 // Tag the new version.
 logHeader("Creating new remote tag...");
 await git.tag(nextVer);
@@ -90,7 +107,7 @@ logHeader("Creating new GitHub release...");
 
 let url: string;
 try {
-  url = await github.release(nextVer, { major, minor, patch, docs, other });
+  url = await github.release(nextVer, releaseNotes);
 } catch (error) {
   // Something went wrong, so delete the local and remote tag and bail.
   console.error(error);

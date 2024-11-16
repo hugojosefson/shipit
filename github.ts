@@ -9,7 +9,17 @@ export interface Commits {
   other: string[];
 }
 
-function generateNotes(
+/**
+ * Generates the release notes for a given version and {@link Commits}.
+ * @param version The version to generate notes for.
+ * @param major The commits that are considered major.
+ * @param minor The commits that are considered minor.
+ * @param patch The commits that are considered patch.
+ * @param docs The commits that are considered docs.
+ * @param other The commits that are considered other.
+ * @returns The release notes for the given version.
+ */
+export function generateReleaseNotes(
   version: string,
   { major, minor, patch, docs, other }: Commits,
 ): string {
@@ -47,7 +57,7 @@ function generateNotes(
 }
 
 export default {
-  async release(nextVer: string, commits: Commits): Promise<string> {
+  async release(nextVer: string, releaseNotes: string): Promise<string> {
     const { owner, repo } = await git.repoInfo();
 
     // Get the GitHub token from environment variables
@@ -55,9 +65,6 @@ export default {
     if (!token) {
       throw new Error("GITHUB_TOKEN environment variable is not set.");
     }
-
-    // Generate the release notes
-    const body = generateNotes(nextVer, commits);
 
     // Create a new release using the 'request' function
     const res = await request("POST /repos/{owner}/{repo}/releases", {
@@ -68,7 +75,7 @@ export default {
       repo,
       name: nextVer,
       tag_name: nextVer,
-      body,
+      body: releaseNotes,
     });
 
     return res.data.html_url;

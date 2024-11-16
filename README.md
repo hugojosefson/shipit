@@ -49,6 +49,9 @@ these are the most notable differences from upstream:
 - [x] Unit tests for the more complex commit messages.
 - [x] Update dependencies.
 - [ ] TODO: Bump version number in any `deno.json` and `deno.jsonc`.
+- [x] Dry-run mode, doesn't make any changes, but prints new version and release
+      notes.
+  - Use `--dry-run` or `-n` to enable, or set `DRY_RUN=1` in your environment.
 
 ## Usage
 
@@ -89,7 +92,7 @@ step.
 permissions:
 
 - `--allow-env`: It reads `GITHUB_TOKEN` from your local environment in order to
-  authenticate with GitHub. It can also read `VERBOSE`.
+  authenticate with GitHub. It can also read `DRY_RUN` and `VERBOSE`.
 - `--allow-run`: It needs to spawn subprocesses (`git`, `bash`) in order to
   gather information about your commits.
 - `--allow-net`: It needs to make outbound network requests to GitHub in order
