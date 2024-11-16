@@ -18,7 +18,7 @@ export default {
     return run([
       "git",
       "log",
-      since === ROOT ? "" : `${since}..HEAD`,
+      ...(since === ROOT ? [] : [`${since}..HEAD`]),
       "--pretty=format:'%s %h'",
       "--abbrev-commit",
       "--extended-regexp",
