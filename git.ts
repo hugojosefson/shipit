@@ -1,4 +1,5 @@
-import { parseRepo, run } from "./deps.ts";
+import parseRepo from "parse-repo";
+import { run } from "@hugojosefson/run-simple";
 
 export const ROOT = Symbol();
 

@@ -1,4 +1,4 @@
-import { assert } from "./deps.ts";
+import { assert } from "@std/assert";
 import {
   DOCS_COMMIT_REGEX,
   MAJOR_COMMIT_REGEX,

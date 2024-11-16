@@ -1,4 +1,4 @@
-import { request } from "./deps.ts";
+import { request } from "@octokit/request";
 import git from "./git.ts";
 
 export interface Commits {

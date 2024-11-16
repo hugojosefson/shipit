@@ -87,7 +87,7 @@ step.
 permissions:
 
 - `--allow-env`: It reads `GITHUB_TOKEN` from your local environment in order to
-  authenticate with GitHub.
+  authenticate with GitHub. It can also read `VERBOSE`.
 - `--allow-run`: It needs to spawn subprocesses (`git`, `bash`) in order to
   gather information about your commits.
 - `--allow-net`: It needs to make outbound network requests to GitHub in order

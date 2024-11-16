@@ -5,7 +5,8 @@ import {
   OTHER_COMMIT_REGEX,
   PATCH_COMMIT_REGEX,
 } from "./commit-regex.ts";
-import { colors, semver } from "./deps.ts";
+import * as colors from "@std/fmt/colors";
+import * as semver from "@std/semver";
 import git, { ROOT } from "./git.ts";
 import github from "./github.ts";
 import { logHeader } from "./log.ts";
@@ -56,8 +57,6 @@ if (
 }
 
 // Bump version.
-// Assert type to be string because we previously
-// checked to make sure our starting semver was valid.
 let nextVer = "0.1.0";
 if (ver !== ROOT) {
   logHeader("Determining next version...");
