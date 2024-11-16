@@ -1,4 +1,4 @@
-import { Octokit, restEndpointMethods } from "./deps.ts";
+import { request } from "./deps.ts";
 import git from "./git.ts";
 
 export interface Commits {
@@ -50,22 +50,23 @@ export default {
   async release(nextVer: string, commits: Commits): Promise<string> {
     const { owner, repo } = await git.repoInfo();
 
-    const restOctokit = Octokit.plugin(restEndpointMethods);
-    const octokit = new restOctokit({
-      auth: Deno.env.get("GITHUB_TOKEN"),
-    });
+    // Get the GitHub token from environment variables
+    const token = Deno.env.get("GITHUB_TOKEN");
+    if (!token) {
+      throw new Error("GITHUB_TOKEN environment variable is not set.");
+    }
 
-    const res = await octokit.rest.repos.createRelease({
+    // Create a new release using the 'request' function
+    const res = await request("POST /repos/{owner}/{repo}/releases", {
+      headers: {
+        authorization: `token ${token}`,
+      },
       owner,
       repo,
       name: nextVer,
       tag_name: nextVer,
       body: generateNotes(nextVer, commits),
     });
-
-    if (res.status !== 201) {
-      throw new Error(`GitHub release failed: ${res.status}`);
-    }
 
     return res.data.html_url;
   },
