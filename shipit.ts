@@ -7,9 +7,12 @@ import {
 } from "./commit-regex.ts";
 import * as colors from "@std/fmt/colors";
 import * as semver from "@std/semver";
+import { swallow } from "@hugojosefson/fns/fn/swallow";
 import git, { ROOT } from "./git.ts";
 import github, { type Commits, generateReleaseNotes } from "./github.ts";
+import { setVersionInDenoJsonFile } from "./json.ts";
 import { logHeader } from "./log.ts";
+import { run } from "@hugojosefson/run-simple";
 
 if (!import.meta.main) {
   Deno.exit(0);
@@ -94,6 +97,47 @@ if (
   console.log(`Release notes for ${nextVer} would be:`);
   console.log(releaseNotes);
   Deno.exit(0);
+}
+
+logHeader("Updating version in any deno.json and deno.jsonc...");
+
+// Sanity check: make sure there are still no uncommitted changes (there shouldn't be).
+if (!(await git.isClean())) {
+  console.error(
+    `There are unexpectedly uncommitted changes in the middle of the release. Aborting.
+    
+This is likely a bug in @hugojosefson/shipit — My bad.
+    
+If you are able, please file a bug report at https://github.com/hugojosefson/shipit/issues
+Include what you feel comfortable with, from the following:
+
+- The exact shipit command you ran, that failed.
+- The output from the shipit command you ran.
+- The output from the following commands, after the error:
+    git status
+    git diff
+    git diff --cached
+    git log
+    git fetch    # only relevant with the first "git fetch" after the error
+
+Thank you!
+`,
+  );
+  Deno.exit(1);
+}
+
+// Write the new version to any `deno.json` and `deno.jsonc`, if needed, and commit.
+await setVersionInDenoJsonFile("deno.json", nextVer).catch(
+  swallow(Deno.errors.NotFound),
+);
+await setVersionInDenoJsonFile("deno.jsonc", nextVer).catch(
+  swallow(Deno.errors.NotFound),
+);
+if (!(await git.isClean())) {
+  console.log("Committing version change to deno.json*...");
+  await run(["git", "add", "."]);
+  await run(["git", "commit", "-m", `chore: release ${nextVer}`]);
+  console.log("Version change committed.");
 }
 
 // Tag the new version.

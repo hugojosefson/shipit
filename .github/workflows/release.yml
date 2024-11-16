@@ -47,6 +47,6 @@ jobs:
         with:
           fetch-depth: 0
       - uses: denoland/setup-deno@v2
-      - run: "deno run --allow-net --allow-env --allow-run shipit.ts ${{ github.ref_name != 'main' && '--dry-run' || '' }}"
+      - run: "deno run --allow-net --allow-env --allow-run --allow-write shipit.ts ${{ github.ref_name != 'main' && '--dry-run' || '' }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
