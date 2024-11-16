@@ -20,9 +20,27 @@ jobs:
       - uses: denoland/setup-deno@v2
       - run: deno fmt --check
 
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+      - run: deno check shipit.ts
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+      - run: deno test
+
   release:
     runs-on: ubuntu-latest
-    needs: [lint, format]
+    needs:
+      - lint
+      - format
+      - check
+      - test
     steps:
       - uses: actions/checkout@v4
         with:
