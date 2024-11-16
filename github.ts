@@ -20,27 +20,27 @@ function generateNotes(
   let notes = `# Version ${version}\n\n`;
   if (major.length) {
     notes += `## Breaking Changes\n\n`;
-    notes += `${listNotes(major)}\n`;
+    notes += `${listNotes(major)}\n\n`;
   }
 
   if (minor.length) {
     notes += `## Features\n\n`;
-    notes += `${listNotes(minor)}\n`;
+    notes += `${listNotes(minor)}\n\n`;
   }
 
   if (patch.length) {
     notes += `## Bug Fixes\n\n`;
-    notes += `${listNotes(patch)}\n`;
+    notes += `${listNotes(patch)}\n\n`;
   }
 
   if (docs.length) {
     notes += `## Documentation\n\n`;
-    notes += `${listNotes(docs)}\n`;
+    notes += `${listNotes(docs)}\n\n`;
   }
 
   if (other.length) {
     notes += `## Other\n\n`;
-    notes += `${listNotes(other)}\n`;
+    notes += `${listNotes(other)}\n\n`;
   }
 
   return notes;
@@ -56,6 +56,9 @@ export default {
       throw new Error("GITHUB_TOKEN environment variable is not set.");
     }
 
+    // Generate the release notes
+    const body = generateNotes(nextVer, commits);
+
     // Create a new release using the 'request' function
     const res = await request("POST /repos/{owner}/{repo}/releases", {
       headers: {
@@ -65,7 +68,7 @@ export default {
       repo,
       name: nextVer,
       tag_name: nextVer,
-      body: generateNotes(nextVer, commits),
+      body,
     });
 
     return res.data.html_url;

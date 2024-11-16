@@ -21,11 +21,10 @@ export default {
       "git",
       "log",
       ...(since === ROOT ? [] : [`${since}..HEAD`]),
-      "--pretty=format:'%s %h'",
+      "--pretty=format:%s %h",
       "--abbrev-commit",
       "--perl-regexp",
-      "--grep",
-      grep,
+      ...["--grep", grep],
     ]).then((commit) => {
       if (!commit) {
         return [];
