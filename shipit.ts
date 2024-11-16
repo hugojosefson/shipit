@@ -77,7 +77,7 @@ try {
   console.error(error);
   await git.deleteLocalTag(nextVer);
   await git.deleteRemoteTag(nextVer);
-  Deno.exit(0);
+  Deno.exit(1);
 }
 
 console.log("Successfully created new GitHub release! 🎉");
