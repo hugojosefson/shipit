@@ -21,7 +21,7 @@ export default {
       ...(since === ROOT ? [] : [`${since}..HEAD`]),
       "--pretty=format:'%s %h'",
       "--abbrev-commit",
-      "--extended-regexp",
+      "--perl-regexp",
       "--grep",
       grep,
     ]).then((commit) => {
