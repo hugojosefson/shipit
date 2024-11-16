@@ -66,8 +66,8 @@ await git.tag(nextVer);
 await git.pushTag(nextVer);
 console.log("New remote tag created:", `${nextVer}\n`);
 
-// Create Github release.
-logHeader("Creating new Github release...");
+// Create GitHub release.
+logHeader("Creating new GitHub release...");
 
 let url: string;
 try {
@@ -80,5 +80,5 @@ try {
   Deno.exit(0);
 }
 
-console.log("Successfully created new Github release! 🎉");
+console.log("Successfully created new GitHub release! 🎉");
 console.log("View it here:", url);

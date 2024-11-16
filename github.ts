@@ -58,7 +58,7 @@ export default {
     });
 
     if (res.status !== 201) {
-      throw new Error(`Github release failed: ${res.status}`);
+      throw new Error(`GitHub release failed: ${res.status}`);
     }
 
     return res.data.html_url;
