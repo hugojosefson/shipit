@@ -48,7 +48,7 @@ these are the most notable differences from upstream:
     example.)
 - [x] Unit tests for the more complex commit messages.
 - [x] Update dependencies.
-- [ ] TODO: Bump version number in any `deno.json` and `deno.jsonc`.
+- [x] Write version number to any `deno.json` and `deno.jsonc`.
 - [x] Dry-run mode, doesn't make any changes, but prints new version and release
       notes.
   - Use `--dry-run` or `-n` to enable, or set `DRY_RUN=1` in your environment.
@@ -56,7 +56,7 @@ these are the most notable differences from upstream:
 ## Usage
 
 ```sh
-GITHUB_TOKEN="$(gh auth token)" deno run --allow-env --allow-run --allow-net https://raw.githubusercontent.com/hugojosefson/shipit/refs/heads/main/shipit.ts
+GITHUB_TOKEN="$(gh auth token)" deno run --allow-env --allow-run --allow-net --allow-write https://raw.githubusercontent.com/hugojosefson/shipit/refs/heads/main/shipit.ts
 ```
 
 If you'd prefer to run `@hugojosefson/shipit` on CI, you can:
@@ -77,7 +77,7 @@ on:
       - uses: denoland/setup-deno@v2
 
       # Use latest version of @hugojosefson/shipit. You may prefer to pin a specific version.
-      - run: deno run --allow-net --allow-env --allow-run https://raw.githubusercontent.com/hugojosefson/shipit/refs/heads/main/shipit.ts
+      - run: deno run --allow-env --allow-run --allow-net --allow-write https://raw.githubusercontent.com/hugojosefson/shipit/refs/heads/main/shipit.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -88,8 +88,8 @@ step.
 
 ## Granting permissions
 
-`@hugojosefson/shipit` requires environment, network, and subprocess creation
-permissions:
+`@hugojosefson/shipit` requires environment, network, subprocess creation, and
+write permissions:
 
 - `--allow-env`: It reads `GITHUB_TOKEN` from your local environment in order to
   authenticate with GitHub. It can also read `DRY_RUN` and `VERBOSE`.
@@ -97,6 +97,7 @@ permissions:
   gather information about your commits.
 - `--allow-net`: It needs to make outbound network requests to GitHub in order
   to create GitHub releases.
+- `--allow-write`: It needs to write to any `deno.json` and `deno.jsonc` files.
 
 ## Examples
 
