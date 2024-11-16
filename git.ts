@@ -42,6 +42,10 @@ export default {
     });
   },
 
+  async isClean(): Promise<boolean> {
+    return ("" === await run("git status --porcelain"));
+  },
+
   tag(tag: string): Promise<string> {
     return run(`git tag ${tag}`);
   },

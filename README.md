@@ -33,6 +33,8 @@ some tweaks have been made to optimize for Deno:
 After forking from [justinawrey/shipit](https://github.com/justinawrey/shipit),
 these are the most notable differences from upstream:
 
+- [x] Require that there are no uncommitted changes before running
+      `@hugojosefson/shipit`.
 - [x] Include **more commit types** under an "Other" section in the release
       notes. They are considered to be at the patch level.
 - [x] Any commit with `!` is considered a **breaking change**.

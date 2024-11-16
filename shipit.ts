@@ -15,6 +15,14 @@ if (!import.meta.main) {
   Deno.exit(0);
 }
 
+// Check if there are any uncommitted changes.
+if (!(await git.isClean())) {
+  console.error(
+    "ERROR: There are uncommitted changes. Please commit or stash them before running @hugojosefson/shipit.",
+  );
+  Deno.exit(2);
+}
+
 // Get latest version.
 logHeader("Getting latest version...");
 let ver: string | typeof ROOT = await git.latestRemoteTag();
