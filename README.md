@@ -1,7 +1,8 @@
 # shipit :canoe:
 
-[![deno module](https://shield.deno.dev/x/shipit)](https://deno.land/x/shipit)
-[![release](https://github.com/justinawrey/shipit/actions/workflows/release.yml/badge.svg)](https://github.com/justinawrey/shipit/actions/workflows/release.yml)
+_(forked from [justinawrey/shipit](https://github.com/justinawrey/shipit))_
+
+[![release](https://github.com/hugojosefson/shipit/actions/workflows/release.yml/badge.svg)](https://github.com/hugojosefson/shipit/actions/workflows/release.yml)
 
 Like [semantic-release](https://github.com/semantic-release/semantic-release),
 but opinionated, fast, and built with Deno in mind.
@@ -19,7 +20,7 @@ some tweaks have been made to optimize for Deno:
 
 - Documentation changes cause a minor version bump. Documentation is a feature,
   especially since [deno doc](https://doc.deno.land) will scrape your code. This
-  decision is less of a Deno convention, and mostly my opinion.
+  decision is less of a Deno convention, and mostly the author's opinion.
 
 - The release workflow is opinionated, and as such runs _fast_ and has _zero
   configuration_. `feat!:` will cause a major version bump, `feat:` or `docs:`
@@ -28,22 +29,9 @@ some tweaks have been made to optimize for Deno:
 
 ## Usage
 
-Install `shipit` locally:
-
 ```sh
-deno install --allow-env --allow-run --allow-net https://deno.land/x/shipit/shipit.ts
+GITHUB_TOKEN="$(gh auth token)" deno run --allow-env --allow-run --allow-net https://raw.githubusercontent.com/hugojosefson/shipit/refs/heads/main/shipit.ts
 ```
-
-And ship it!
-
-```sh
-shipit
-```
-
-In order to be able to authenticate with GitHub, you must set an environment
-variable called `GITHUB_TOKEN` to a
-[personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
-with `repo` permissions.
 
 If you'd prefer to run `shipit` on CI, you can:
 
@@ -63,7 +51,7 @@ on:
       - uses: denoland/setup-deno@v2
 
       # Use latest version of shipit.  You may prefer to pin a specific version.
-      - run: deno run --allow-net --allow-env --allow-run https://deno.land/x/shipit/shipit.ts
+      - run: deno run --allow-net --allow-env --allow-run https://raw.githubusercontent.com/hugojosefson/shipit/refs/heads/main/shipit.ts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -86,4 +74,4 @@ script, as well as set `fetch-depth: 0` in the checkout step.
 ## Examples
 
 `shipit` uses itself for releases. You can see the shape of the generated
-releases [here](https://github.com/justinawrey/shipit/releases).
+releases [here](https://github.com/hugojosefson/shipit/releases).
